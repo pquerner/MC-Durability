@@ -48,7 +48,7 @@ public class PlayerListener implements Listener {
                         || m == Material.STONE_HOE
                         || m == Material.WOOD_HOE
 
-                        //Shade
+                        //Spade
                         || m == Material.DIAMOND_SPADE
                         || m == Material.GOLD_SPADE
                         || m == Material.IRON_SPADE
