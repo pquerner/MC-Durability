@@ -55,8 +55,8 @@ public class PlayerListener implements Listener {
             }
 
             //Only enable if user wanted to, or default says so
-            if (f.getBoolean("enabled-by-default")) {
-                this.plugin.getServer().dispatchCommand(p, "duwon");
+            if (f.getBoolean("durability_warning_enabled")) {
+                this.plugin.getServer().dispatchCommand(p, "duw 1");
             }
         }
     }

@@ -9,10 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 import java.util.TreeSet;
 
 
@@ -55,47 +52,44 @@ public class Main extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
 
+            if (args.length == 0 || args.length >= 2) {
+                return false;
+            }
+
             //Cast to Player object
             Player player = (Player) sender;
             String playerName = player.getName();
 
             //Generate TreeSet of valid commands for disabling this plugin
-            TreeSet<String> disableCommands = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-            disableCommands.add("duwoff");
-            disableCommands.add("durability_disable");
-            disableCommands.add("durability-disable");
-
-            //Generate TreeSet of valid commands for enabling this plugin
-            TreeSet<String> enableCommands = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-            enableCommands.add("duwon");
-            enableCommands.add("durabilitywarner_enable");
-            enableCommands.add("durabilitywarner-enable");
+            TreeSet<String> commands = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+            commands.add("duw");
+            commands.add("durabilitywarner");
 
             ConfigManager cm = ConfigManager.getConfig(player);
             FileConfiguration f = cm.getConfig();
 
-            if (disableCommands.contains(cmd.getName())) {
-                player.sendMessage(ChatColor.RED + String.format("[%s] is now disabled for you.", getDescription().getName()));
-                if (!this.commandDisabledForPlayers.contains(playerName)) {
-                    f.set("durability_warning_enabled", false);
-                    cm.saveConfig();
+            if (commands.contains(cmd.getName())) {
+                if (args[0].toString().equalsIgnoreCase("0") || args[0].toString().equalsIgnoreCase("off")) {
+                    player.sendMessage(ChatColor.RED + String.format("[%s] is now disabled for you.", getDescription().getName()));
+                    if (!this.commandDisabledForPlayers.contains(playerName)) {
+                        f.set("durability_warning_enabled", false);
+                        cm.saveConfig();
 
-                    this.commandDisabledForPlayers.add(playerName);
-                    this.commandEnabledForPlayers.remove(playerName);
-                }
-                return true;
-            } else if (enableCommands.contains(cmd.getName())) {
-                player.sendMessage(ChatColor.GREEN + String.format("[%s] is now enabled for you.", getDescription().getName()));
-                if (!this.commandEnabledForPlayers.contains(playerName)) {
-                    f.set("durability_warning_enabled", true);
-                    cm.saveConfig();
-                    this.commandEnabledForPlayers.add(playerName);
-                    this.commandDisabledForPlayers.remove(playerName);
+                        this.commandDisabledForPlayers.add(playerName);
+                        this.commandEnabledForPlayers.remove(playerName);
+                    }
+                } else if (args[0].toString().equalsIgnoreCase("1") || args[0].toString().equalsIgnoreCase("on")) {
+                    player.sendMessage(ChatColor.GREEN + String.format("[%s] is now enabled for you.", getDescription().getName()));
+                    if (!this.commandEnabledForPlayers.contains(playerName)) {
+                        f.set("durability_warning_enabled", true);
+                        cm.saveConfig();
+                        this.commandEnabledForPlayers.add(playerName);
+                        this.commandDisabledForPlayers.remove(playerName);
+                    }
                 }
 
                 return true;
-            } else {
-                //sender.sendMessage("Unknown command!");
+
             }
         } else {
             sender.sendMessage("Only players can issue the plugin commands.");

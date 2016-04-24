@@ -1,5 +1,5 @@
  name: Durability Warner
- version: 0.3
+ version: 0.4
  description: Durability Warner by Paco
 
  author: Paco
@@ -9,11 +9,7 @@
  main: de.paskl.durability.Main
 
  commands:
-   duwon:
-     description: Enabled the low durability warning for you.
-     aliases: [durabilitywarner_disable, durabilitywarner-disable]
-     usage: /<command>
-   duwoff:
-        description: Disabled the low durability warning for you.
-        aliases: [durabilitywarner_enable, durabilitywarner-enable]
-        usage: /<command>
+   duw:
+     description: Durability Warner Command.
+     aliases: [durabilitywarner]
+     usage: /<command> [0|off|1|on]
