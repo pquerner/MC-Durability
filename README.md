@@ -1,5 +1,5 @@
 ## Durability Plugin for MineCraft
-Version: v0.4
+Version: v0.5
 
 ## What does it do?
 
@@ -12,9 +12,19 @@ This plugin will warn you if you get 20 or less durability on any craftsmen item
 
 # Commands Overview:
 
+Turn off/on:
+
     /durabilitywarner [1|0|on|off]
     OR: /duw [1|0|on|off]
 
+Configuration:
+
+    /durabilitywarnerconfig [<key>=<value>]
+    OR: /duwc [<key>=<value>]
+
+    The key must be defined in config.yml, otherwise it is ignored.
+    The value must be not empty and may be a String or an Integer.
+
 ## TODO
 
-Durability configuration (what items, what level warning, ...)
+Durability configuration (what items to have this plugin working with, ?)

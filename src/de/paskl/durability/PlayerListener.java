@@ -20,7 +20,6 @@ import java.util.Locale;
 public class PlayerListener implements Listener {
 
     private Main plugin;
-    private ConfigManager cm;
     private FileConfiguration f;
 
     public PlayerListener(Main plugin) {
@@ -45,6 +44,7 @@ public class PlayerListener implements Listener {
                 f.set("join_date", format.format(now));
                 f.set("last_join", format.format(now));
                 f.set("durability_warning_enabled", this.plugin.getConfig().getBoolean("enabled-by-default"));
+                f.set("minimum-durability", this.plugin.getConfig().getInt("minimum-durability"));
                 cm.saveConfig();
             } else {
                 FileConfiguration f = cm.getConfig();
@@ -72,7 +72,6 @@ public class PlayerListener implements Listener {
                 Material blockType = block.getType();
                 Material heldItemType = heldItem.getType();
 
-                //TODO beautify this
                 if (//Axe
                         (heldItemType.toString().contains("_AXE")
                                 //Pickaxe
@@ -95,15 +94,22 @@ public class PlayerListener implements Listener {
                     double uses = heldItem.getDurability();
                     int leftDurability = ((int) max) - ((int) uses);
 
-                    //TODO make configurable
-                    if (uses > 0 && 20.0 >= max - uses) {
+                    // If the user did something bad here,
+                    // like destroying the configuration (by entereing non numeric values into the field etc.)
+                    // the value of "minimum-durability" will be (int)0. therefore it must be corrupt?!
+                    // Set it back to a reasonable number
+                    if (f.getInt("minimum-durability") == 0) {
+                        f.set("minimum-durability", this.plugin.getConfig().getInt("minimum-durability"));
+                    }
+
+                    if (uses > 0 && f.getInt("minimum-durability") >= max - uses) {
                         p.sendMessage(ChatColor.RED + "[WARNING]: Item has too little duration left!\nDuration left: " + leftDurability + "\n");
                         //event.setCancelled(true); //If you want to cancel the event. Can be bad in combat, so its disabled.
                     }/* else { //TODO ONLY FOR DEBUGGING
-                Integer integerObject = new Integer("20");
-                short dura = (short)(max - integerObject.shortValue());
-                heldItem.setDurability(dura);
-            }*/
+                        Integer integerObject = new Integer("20");
+                        short dura = (short) (max - integerObject.shortValue());
+                        heldItem.setDurability(dura);
+                    }*/
                 }
             }
         }

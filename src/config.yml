@@ -1,4 +1,11 @@
 # Durability config file
+
   # Whether or not the player (after join) has this plugin enabled
   # Will be overwritten if the player chose not to enable this plugin (by command /duwoff|on)
   enabled-by-default: true
+
+
+
+  # For players specificly:
+  # When the plugin will warn you about left duration on the item
+  minimum-durability: 20

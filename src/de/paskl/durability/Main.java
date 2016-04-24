@@ -1,6 +1,7 @@
 package de.paskl.durability;
 
 import de.paskl.durability.utils.ConfigManager;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -27,7 +28,7 @@ public class Main extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
 
-        getLogger().info(String.format("[%s] v%s loaded.", getDescription().getName(), getDescription().getVersion().toString()));
+        getLogger().info(String.format("[%s] v%s loaded.", getDescription().getName(), getDescription().getVersion()));
     }
 
     @Override
@@ -35,18 +36,18 @@ public class Main extends JavaPlugin {
         getLogger().info(getDescription().getName() + " is now disabled.");
     }
 
-    public void registerListener() {
+    private void registerListener() {
         new PlayerListener(this);
     }
 
 
     /**
-     * En/Disabled the modules functionality
+     * Handles the plugins commands
      *
      * @param sender - Where the command is send from
      * @param cmd    - Command string
      * @param label  - ?
-     * @param args   - ?
+     * @param args   - Arguments passed to the method
      * @return bool
      */
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -60,7 +61,7 @@ public class Main extends JavaPlugin {
             Player player = (Player) sender;
             String playerName = player.getName();
 
-            //Generate TreeSet of valid commands for disabling this plugin
+            //Generate TreeSet of valid commands for this plugin
             TreeSet<String> commands = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
             commands.add("duw");
             commands.add("durabilitywarner");
@@ -78,7 +79,7 @@ public class Main extends JavaPlugin {
                         this.commandDisabledForPlayers.add(playerName);
                         this.commandEnabledForPlayers.remove(playerName);
                     }
-                } else if (args[0].toString().equalsIgnoreCase("1") || args[0].toString().equalsIgnoreCase("on")) {
+                } else if (args[0].equalsIgnoreCase("1") || args[0].equalsIgnoreCase("on")) {
                     player.sendMessage(ChatColor.GREEN + String.format("[%s] is now enabled for you.", getDescription().getName()));
                     if (!this.commandEnabledForPlayers.contains(playerName)) {
                         f.set("durability_warning_enabled", true);
@@ -88,6 +89,34 @@ public class Main extends JavaPlugin {
                     }
                 }
 
+                return true;
+
+            }
+
+
+            //Generate TreeSet of valid commands for this plugin
+            TreeSet<String> pluginConfigurationCommand = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+            pluginConfigurationCommand.add("duwc");
+            pluginConfigurationCommand.add("durabilitywarnerconfig");
+
+            if (pluginConfigurationCommand.contains(cmd.getName())) {
+                //I expect the value in key=value format.
+                String split[] = args[0].split("=");
+                String key = split[0];
+                String value = split[1];
+
+                //Check if the key is even valid by looking it up in the config.yml
+                if (this.getConfig().isString(key) || this.getConfig().isInt(key)) {
+                    player.sendMessage(ChatColor.AQUA + String.format("[%s] Set '%s' to '%s'.", getDescription().getName(), key, value));
+                    if (StringUtils.isNumeric(value)) {
+                        f.set(key, Integer.parseInt(value));
+                    } else if (StringUtils.isNotEmpty(value)) {
+                        f.set(key, value);
+                    }
+                    cm.saveConfig();
+                } else {
+                    player.sendMessage(ChatColor.RED + String.format("[%s] Key '%s' does not exist. Ignoring this input.", getDescription().getName(), key));
+                }
                 return true;
 
             }

@@ -1,10 +1,10 @@
  name: Durability Warner
- version: 0.4
+ version: 0.5
  description: Durability Warner by Paco
 
  author: Paco
  authors: [Paco]
- website: http://paskl.de
+ website: http://wwww.paskl.de
  
  main: de.paskl.durability.Main
 
@@ -13,3 +13,7 @@
      description: Durability Warner Command.
      aliases: [durabilitywarner]
      usage: /<command> [0|off|1|on]
+   duwc:
+        description: Durability Warner Command Configurator. See config.yml for reference of what you can define. Not all options in there have meaning for players, tho!
+        aliases: [durabilitywarnerconfig]
+        usage: /<command> [<key>=<value>] (eg. /<command> minimum-durability=20 (sets the duration to 20)
