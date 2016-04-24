@@ -1,5 +1,5 @@
 ## Durability Plugin for MineCraft
-Version: v0.2
+Version: v0.3
 
 ## What does it do?
 
@@ -11,6 +11,5 @@ This plugin will warn you if you get 20 or less durability on any craftsmen item
 3. Start server
 
 ## TODO
-Commands (on/off per player)
 
 Durability configuration (what items, what level warning, ...)

@@ -1,13 +1,18 @@
 package de.paskl.durability;
 
+import de.paskl.durability.utils.ConfigManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.TreeSet;
 
 
@@ -21,6 +26,9 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         this.manager = this.getServer().getPluginManager();
         this.registerListener();
+
+        getConfig().options().copyDefaults(true);
+        saveConfig();
 
         getLogger().info(String.format("[%s] v%s loaded.", getDescription().getName(), getDescription().getVersion().toString()));
     }
@@ -63,9 +71,15 @@ public class Main extends JavaPlugin {
             enableCommands.add("durabilitywarner_enable");
             enableCommands.add("durabilitywarner-enable");
 
+            ConfigManager cm = ConfigManager.getConfig(player);
+            FileConfiguration f = cm.getConfig();
+
             if (disableCommands.contains(cmd.getName())) {
                 player.sendMessage(ChatColor.RED + String.format("[%s] is now disabled for you.", getDescription().getName()));
                 if (!this.commandDisabledForPlayers.contains(playerName)) {
+                    f.set("durability_warning_enabled", false);
+                    cm.saveConfig();
+
                     this.commandDisabledForPlayers.add(playerName);
                     this.commandEnabledForPlayers.remove(playerName);
                 }
@@ -73,6 +87,8 @@ public class Main extends JavaPlugin {
             } else if (enableCommands.contains(cmd.getName())) {
                 player.sendMessage(ChatColor.GREEN + String.format("[%s] is now enabled for you.", getDescription().getName()));
                 if (!this.commandEnabledForPlayers.contains(playerName)) {
+                    f.set("durability_warning_enabled", true);
+                    cm.saveConfig();
                     this.commandEnabledForPlayers.add(playerName);
                     this.commandDisabledForPlayers.remove(playerName);
                 }
