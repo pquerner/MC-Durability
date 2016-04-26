@@ -31,11 +31,6 @@ public class Main extends JavaPlugin {
         getLogger().info(String.format("[%s] v%s loaded.", getDescription().getName(), getDescription().getVersion()));
     }
 
-    @Override
-    public void onDisable() {
-        getLogger().info(getDescription().getName() + " is now disabled.");
-    }
-
     private void registerListener() {
         new PlayerListener(this);
     }
@@ -70,7 +65,7 @@ public class Main extends JavaPlugin {
             FileConfiguration f = cm.getConfig();
 
             if (commands.contains(cmd.getName())) {
-                if (args[0].toString().equalsIgnoreCase("0") || args[0].toString().equalsIgnoreCase("off")) {
+                if (args[0].equalsIgnoreCase("0") || args[0].equalsIgnoreCase("off")) {
                     player.sendMessage(ChatColor.RED + String.format("[%s] is now disabled for you.", getDescription().getName()));
                     if (!this.commandDisabledForPlayers.contains(playerName)) {
                         f.set("durability_warning_enabled", false);

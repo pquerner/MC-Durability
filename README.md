@@ -1,5 +1,5 @@
 ## Durability Plugin for MineCraft
-Version: v0.5
+Version: v0.6
 
 ## What does it do?
 
