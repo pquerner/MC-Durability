@@ -1,9 +1,11 @@
 ## Durability Plugin for MineCraft
-Version: v0.6
+Version: v0.7
 
 ## What does it do?
 
-This plugin will warn you if you get 20 or less durability on any craftsmen item (axe, pickaxe, shovel, sword, hoe).
+This plugin will warn you with a message in chat if you get 20 (default) or less durability on any of these items:
+- Craftitems (Axe, Pickaxe, Hoes, Swords)
+- Armor (Leggings, Helmet, Chestplate, Boots)
 
 ## Installation
 1. Build this plugin. (I've used maven)

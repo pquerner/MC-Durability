@@ -32,7 +32,7 @@ public class Main extends JavaPlugin {
     }
 
     private void registerListener() {
-        new PlayerListener(this);
+        new GlobalListener(this);
     }
 
 
